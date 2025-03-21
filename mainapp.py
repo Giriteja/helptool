@@ -71,8 +71,11 @@ def convert_pdf_to_images(pdf_file, dpi=300):
 
 # Convert image to base64
 def image_to_base64(img):
-    buffered = BytesIO()
-    img.save(buffered, format="JPEG")
+    if isinstance(img, bytes):  # Ensure compatibility
+        return base64.b64encode(img).decode("utf-8")
+    
+    buffered = io.BytesIO()
+    img.save(buffered, format="JPEG")  # Ensure it saves as an image
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
 
 # Extract text using Claude
