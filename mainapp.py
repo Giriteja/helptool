@@ -54,10 +54,19 @@ def convert_pdf_to_images(pdf_file, dpi=300):
     try:
         images = convert_from_path(tmp_path, dpi=dpi)
         os.unlink(tmp_path)  # Delete the temporary file
-        return images
+        
+        # Convert images to bytes
+        img_bytes_list = []
+        for img in images:
+            img_byte_arr = io.BytesIO()
+            img.save(img_byte_arr, format="PNG")
+            img_bytes_list.append(img_byte_arr.getvalue())  # Get bytes
+        
+        return img_bytes_list  # Return bytes instead of PIL images
+    
     except Exception as e:
         st.error(f"Error converting PDF: {e}")
-        os.unlink(tmp_path)  # Delete the temporary file
+        os.unlink(tmp_path)
         return []
 
 # Convert image to base64
