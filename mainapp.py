@@ -328,6 +328,7 @@ def main():
         if st.session_state.pdf_images:
             current_index = st.session_state.selected_image_index
             current_image = st.session_state.pdf_images[current_index]
+            image = Image.open(BytesIO(current_image))
             
             st.subheader(f"Page {current_index + 1}")
             
@@ -357,7 +358,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_image=current_image,
+                    background_image=image,
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
