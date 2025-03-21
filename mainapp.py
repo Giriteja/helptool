@@ -337,7 +337,7 @@ def main():
             with col1:
                 # Convert PIL image to numpy for the canvas
                 img_array = pil_to_numpy(current_image)
-                
+                img_array = np.array(current_image).astype(np.uint8)
                 # Create a canvas for interactive selection
                 st.write("**Draw a rectangle around the answer you want to extract:**")
                 canvas_result = st_canvas(
@@ -349,8 +349,7 @@ def main():
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
                     width=img_array.shape[1],
-                    height=img_array.shape[0]
-                     # Limit the component height for better display
+                    height=min(700, img_array.shape[0])  # Limit height for better display
                 )
                 
                 # Process the drawn rectangle
