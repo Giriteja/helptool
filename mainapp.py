@@ -367,7 +367,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_image=image,
+                    background_image=current_image,
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
