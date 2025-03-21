@@ -15,12 +15,20 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 
 
-import os
-import subprocess
+import sys
+import importlib.util
 
-# Run setup script if not already done
-if not os.environ.get('POPLAR_SDK_ENABLED'):
-    subprocess.call(['bash', 'setup.sh'])
+# Run init script
+spec = importlib.util.spec_from_file_location("init", "init.py")
+init = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(init)
+
+# Now try to import poptorch
+try:
+    import poptorch
+    st.success("PopTorch successfully loaded!")
+except ImportError as e:
+    st.error(f"Failed to load PopTorch: {e}")
 # Set page configuration
 st.set_page_config(
     page_title="Exam Answer Comparison Tool",
