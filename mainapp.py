@@ -337,7 +337,6 @@ def main():
         if st.session_state.pdf_images:
             current_index = st.session_state.selected_image_index
             current_image = st.session_state.pdf_images[current_index]
-            image = Image.open(BytesIO(current_image))
             
             st.subheader(f"Page {current_index + 1}")
             
