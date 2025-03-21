@@ -5,6 +5,3 @@ opencv-python
 anthropic
 pandas
 matplotlib
---find-links https://download.pytorch.org/whl/torch_stable.html
-torch>=1.10.0
-https://downloads.graphcore.ai/direct/path-to-your-poptorch-wheel.whl
