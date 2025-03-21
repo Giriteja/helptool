@@ -337,24 +337,22 @@ def main():
             with col1:
                 # Convert PIL image to numpy for the canvas
             
-                # Convert PIL image to numpy for the canvas with proper formatting
-                if current_image.mode == 'RGBA':
-                    current_image = current_image.convert('RGB')
-                img_array = np.array(current_image).astype(np.uint8)
+               # Display the image first
+                st.image(current_image, use_column_width=True)
                 
-                # Create a canvas for interactive selection
-                st.write("**Draw a rectangle around the answer you want to extract:**")
+                # Then create a canvas without background image
+                st.write("**Draw a rectangle on the image above:**")
                 canvas_result = st_canvas(
-                    fill_color="rgba(255, 165, 0, 0.3)",  # Orange with transparency
+                    fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
-                    stroke_color="#FF0000",  # Red border
-                    background_image=img_array,
+                    stroke_color="#FF0000",
+                    background_color="",
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
-                    width=img_array.shape[1],
-                    height=min(700, img_array.shape[0])  # Limit height for better display
-        )
+                    width=current_image.width,
+                    height=min(700, current_image.height)
+                )
                     
                 # Process the drawn rectangle
                 if canvas_result.json_data is not None and len(canvas_result.json_data["objects"]) > 0:
