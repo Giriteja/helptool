@@ -336,26 +336,26 @@ def main():
             
             with col1:
                 # Convert PIL image to numpy for the canvas
-                with col1:
-            # Convert PIL image to numpy for the canvas with proper formatting
-            if current_image.mode == 'RGBA':
-                current_image = current_image.convert('RGB')
-            img_array = np.array(current_image).astype(np.uint8)
             
-            # Create a canvas for interactive selection
-            st.write("**Draw a rectangle around the answer you want to extract:**")
-            canvas_result = st_canvas(
-                fill_color="rgba(255, 165, 0, 0.3)",  # Orange with transparency
-                stroke_width=2,
-                stroke_color="#FF0000",  # Red border
-                background_image=img_array,
-                drawing_mode="rect",
-                key=f"canvas_{current_index}",
-                update_streamlit=True,
-                width=img_array.shape[1],
-                height=min(700, img_array.shape[0])  # Limit height for better display
-    )
+                # Convert PIL image to numpy for the canvas with proper formatting
+                if current_image.mode == 'RGBA':
+                    current_image = current_image.convert('RGB')
+                img_array = np.array(current_image).astype(np.uint8)
                 
+                # Create a canvas for interactive selection
+                st.write("**Draw a rectangle around the answer you want to extract:**")
+                canvas_result = st_canvas(
+                    fill_color="rgba(255, 165, 0, 0.3)",  # Orange with transparency
+                    stroke_width=2,
+                    stroke_color="#FF0000",  # Red border
+                    background_image=img_array,
+                    drawing_mode="rect",
+                    key=f"canvas_{current_index}",
+                    update_streamlit=True,
+                    width=img_array.shape[1],
+                    height=min(700, img_array.shape[0])  # Limit height for better display
+        )
+                    
                 # Process the drawn rectangle
                 if canvas_result.json_data is not None and len(canvas_result.json_data["objects"]) > 0:
                     # Get the last drawn rectangle
