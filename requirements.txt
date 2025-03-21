@@ -5,3 +5,4 @@ opencv-python
 anthropic
 pandas
 matplotlib
+streamlit-drawable-canvas
