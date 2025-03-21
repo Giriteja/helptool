@@ -338,6 +338,9 @@ def main():
                 # Convert PIL image to numpy for the canvas
                 img_array = pil_to_numpy(current_image)
                 img_array = np.array(current_image).astype(np.uint8)
+                if current_image.mode == 'RGBA':
+                    current_image = current_image.convert('RGB')
+                img_array = np.array(current_image)
                 # Create a canvas for interactive selection
                 st.write("**Draw a rectangle around the answer you want to extract:**")
                 canvas_result = st_canvas(
