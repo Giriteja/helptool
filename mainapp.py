@@ -344,7 +344,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",  # Orange with transparency
                     stroke_width=2,
                     stroke_color="#FF0000",  # Red border
-                    background_image=img_array,
+                    background_image=img_array.any(),
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
