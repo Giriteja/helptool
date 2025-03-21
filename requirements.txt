@@ -1,0 +1,1 @@
+pip install streamlit pdf2image pillow opencv-python anthropic pandas matplotlib
