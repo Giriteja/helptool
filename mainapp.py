@@ -338,6 +338,7 @@ def main():
                 # Convert PIL image to numpy for the canvas
             
                # Display the image first
+                st.write(type(current_image))
                 st.image(current_image, use_column_width=True)
                 
                 # Convert PIL image to numpy with careful type conversion
