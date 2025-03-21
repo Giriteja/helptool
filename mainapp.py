@@ -14,6 +14,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 
+
+import os
+import subprocess
+
+# Run setup script if not already done
+if not os.environ.get('POPLAR_SDK_ENABLED'):
+    subprocess.call(['bash', 'setup.sh'])
 # Set page configuration
 st.set_page_config(
     page_title="Exam Answer Comparison Tool",
