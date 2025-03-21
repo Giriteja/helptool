@@ -340,18 +340,29 @@ def main():
                # Display the image first
                 st.image(current_image, use_column_width=True)
                 
-                # Then create a canvas without background image
-                st.write("**Draw a rectangle on the image above:**")
+                # Convert PIL image to numpy with careful type conversion
+                if current_image.mode == 'RGBA':
+                    current_image = current_image.convert('RGB')
+                
+                # Get image dimensions first
+                width = current_image.width
+                height = current_image.height
+                
+                # Convert to numpy array without any function calls
+                img_array = np.array(current_image)
+                
+                # Create a canvas with explicit dimensions
+                st.write("**Draw a rectangle around the answer you want to extract:**")
                 canvas_result = st_canvas(
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_color="",
+                    background_image=img_array,
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
-                    width=current_image.width,
-                    height=min(700, current_image.height)
+                    width=width,
+                    height=min(700, height)
                 )
                     
                 # Process the drawn rectangle
