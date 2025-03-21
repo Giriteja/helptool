@@ -342,8 +342,7 @@ def main():
                 st.image(current_image, use_column_width=True)
                 
                 # Convert PIL image to numpy with careful type conversion
-                if current_image.mode == 'RGBA':
-                    current_image = current_image.convert('RGB')
+                
                 
                 # Get image dimensions first
                 width = current_image.width
@@ -358,7 +357,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_image=Image.open(img_array),
+                    background_image=current_image,
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
