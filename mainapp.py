@@ -13,6 +13,8 @@ from difflib import SequenceMatcher
 import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
+import streamlit_drawable_canvas
+from streamlit_drawable_canvas import st_canvas
 
 
 import sys
@@ -23,7 +25,6 @@ spec = importlib.util.spec_from_file_location("init", "init.py")
 init = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(init)
 
-# Now try to import poptorch
 # Set page configuration
 st.set_page_config(
     page_title="Exam Answer Comparison Tool",
@@ -210,6 +211,31 @@ def get_ai_feedback(extracted_text, solution_text, client):
     except Exception as e:
         return f"Error generating AI feedback: {e}"
 
+# Convert PIL image to numpy array
+def pil_to_numpy(pil_img):
+    return np.array(pil_img)
+
+# Convert numpy array to PIL image
+def numpy_to_pil(np_img):
+    return Image.fromarray(np_img)
+
+# Crop image based on rectangle coordinates
+def crop_image_from_rect(image, rect_coords):
+    x_min = int(min(rect_coords[0], rect_coords[2]))
+    y_min = int(min(rect_coords[1], rect_coords[3]))
+    x_max = int(max(rect_coords[0], rect_coords[2]))
+    y_max = int(max(rect_coords[1], rect_coords[3]))
+    
+    # Ensure coordinates are within image bounds
+    x_min = max(0, x_min)
+    y_min = max(0, y_min)
+    x_max = min(image.width, x_max)
+    y_max = min(image.height, y_max)
+    
+    # Create the crop
+    cropped = image.crop((x_min, y_min, x_max, y_max))
+    return cropped
+
 # Main Streamlit app
 def main():
     st.title("Exam Answer Comparison Tool")
@@ -232,6 +258,8 @@ def main():
         st.session_state.comparisons = []
     if "ai_feedbacks" not in st.session_state:
         st.session_state.ai_feedbacks = []
+    if "crop_rect" not in st.session_state:
+        st.session_state.crop_rect = None
     
     # Sidebar for file upload and settings
     with st.sidebar:
@@ -307,46 +335,61 @@ def main():
             col1, col2 = st.columns([3, 2])
             
             with col1:
-                # Convert PIL image to bytes for display
-                img_bytes = BytesIO()
-                current_image.save(img_bytes, format="PNG")
-                img_bytes.seek(0)
+                # Convert PIL image to numpy for the canvas
+                img_array = pil_to_numpy(current_image)
                 
-                st.image(img_bytes, use_column_width=True)
+                # Create a canvas for interactive selection
+                st.write("**Draw a rectangle around the answer you want to extract:**")
+                canvas_result = st_canvas(
+                    fill_color="rgba(255, 165, 0, 0.3)",  # Orange with transparency
+                    stroke_width=2,
+                    stroke_color="#FF0000",  # Red border
+                    background_image=img_array,
+                    drawing_mode="rect",
+                    key=f"canvas_{current_index}",
+                    update_streamlit=True,
+                    width=img_array.shape[1],
+                    height=img_array.shape[0],
+                    height_component=600,  # Limit the component height for better display
+                )
                 
-                # Simple cropping using x, y, width, height
-                st.subheader("Crop Image")
-                col_x, col_y = st.columns(2)
-                col_w, col_h = st.columns(2)
-                
-                with col_x:
-                    x = st.number_input("X", min_value=0, max_value=current_image.width, value=0)
-                with col_y:
-                    y = st.number_input("Y", min_value=0, max_value=current_image.height, value=0)
-                with col_w:
-                    w = st.number_input("Width", min_value=1, max_value=current_image.width-x, value=min(500, current_image.width-x))
-                with col_h:
-                    h = st.number_input("Height", min_value=1, max_value=current_image.height-y, value=min(500, current_image.height-y))
-                
-                if st.button("Crop and Extract"):
-                    # Crop the image
-                    cropped_img = current_image.crop((x, y, x+w, y+h))
+                # Process the drawn rectangle
+                if canvas_result.json_data is not None and len(canvas_result.json_data["objects"]) > 0:
+                    # Get the last drawn rectangle
+                    last_rect = canvas_result.json_data["objects"][-1]
                     
-                    # Save the cropped image
-                    if len(st.session_state.cropped_images) <= current_index:
-                        st.session_state.cropped_images.extend([None] * (current_index + 1 - len(st.session_state.cropped_images)))
-                    st.session_state.cropped_images[current_index] = cropped_img
+                    # Extract coordinates (scale_factor adjusts for any canvas scaling)
+                    left = last_rect.get("left", 0)
+                    top = last_rect.get("top", 0)
+                    width = last_rect.get("width", 0)
+                    height = last_rect.get("height", 0)
                     
-                    # Extract text using Claude
-                    extracted_text = extract_text_with_claude(cropped_img, client)
-                    st.session_state.extracted_texts[current_index] = extracted_text
-                    
-                    st.success("Image cropped and text extracted!")
+                    # Store rectangle coordinates [x1, y1, x2, y2]
+                    st.session_state.crop_rect = [left, top, left + width, top + height]
+                
+                # Button to extract the selected area
+                if st.session_state.crop_rect and st.button("Extract Selected Area"):
+                    with st.spinner("Extracting text..."):
+                        # Crop the image
+                        cropped_img = crop_image_from_rect(current_image, st.session_state.crop_rect)
+                        
+                        # Save the cropped image
+                        if len(st.session_state.cropped_images) <= current_index:
+                            st.session_state.cropped_images.extend([None] * (current_index + 1 - len(st.session_state.cropped_images)))
+                        st.session_state.cropped_images[current_index] = cropped_img
+                        
+                        # Extract text using Claude
+                        extracted_text = extract_text_with_claude(cropped_img, client)
+                        st.session_state.extracted_texts[current_index] = extracted_text
+                        
+                        st.success("Image cropped and text extracted!")
             
             with col2:
                 if st.session_state.cropped_images and current_index < len(st.session_state.cropped_images) and st.session_state.cropped_images[current_index] is not None:
                     st.subheader("Cropped Area")
                     st.image(st.session_state.cropped_images[current_index], use_column_width=True)
+                else:
+                    st.info("Draw a rectangle on the image and click 'Extract Selected Area' to crop.")
         else:
             st.info("Please upload a PDF file from the sidebar to begin.")
     
