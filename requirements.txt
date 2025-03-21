@@ -1,7 +1,7 @@
 streamlit
 pdf2image
 pillow
-opencv-python
+opencv-python-headless==4.5.3.56
 anthropic
 pandas
 matplotlib
