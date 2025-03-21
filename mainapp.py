@@ -24,11 +24,6 @@ init = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(init)
 
 # Now try to import poptorch
-try:
-    import poptorch
-    st.success("PopTorch successfully loaded!")
-except ImportError as e:
-    st.error(f"Failed to load PopTorch: {e}")
 # Set page configuration
 st.set_page_config(
     page_title="Exam Answer Comparison Tool",
