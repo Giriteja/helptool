@@ -338,7 +338,7 @@ def main():
                 # Convert PIL image to numpy for the canvas
             
                # Display the image first
-                st.write(type(current_image))
+                print(type(current_image))
                 st.image(current_image, use_column_width=True)
                 
                 # Convert PIL image to numpy with careful type conversion
@@ -358,7 +358,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_image=current_image,
+                    background_image=Image.open(img_array) if img_array else None,
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
