@@ -87,9 +87,9 @@ def extract_text_with_claude(image, client):
         base64_image = image_to_base64(image)
         
         response = client.messages.create(
-            model="claude-3-opus-20240229",
-            max_tokens=4000,
-            system="You are an expert OCR system. Your task is to accurately extract text from the provided student hand written image. Extract all visible text maintaining original formatting as much as possible. If mathematical equations are present, represent them using LaTeX notation.",
+            model="claude-3-7-sonnet-20250219",
+            max_tokens=8000,
+            system="You are an expert OCR system. Your task is to accurately extract text from the provided student hand written image. Extract all visible text maintaining original formatting as much as possible.",
             messages=[
                 {
                     "role": "user",
@@ -104,7 +104,7 @@ def extract_text_with_claude(image, client):
                         },
                         {
                             "type": "text", 
-                            "text": "Extract all the text from this image, preserving the formatting as much as possible. If there are mathematical equations, represent them using LaTeX notation."
+                            "text": "Extract all the text from this image, preserving the formatting as much as possible."
                         }
                     ]
                 }
@@ -187,8 +187,8 @@ def get_ai_feedback(extracted_text, solution_text, client):
     
     try:
         response = client.messages.create(
-            model="claude-3-opus-20240229",
-            max_tokens=2000,
+            model="claude-3-opus-20240229model",
+            max_tokens=5000,
             system="You are an expert teacher assistant who helps grade student answers and provide detailed, constructive feedback.",
             messages=[
                 {
@@ -202,6 +202,8 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     3. Any misconceptions or errors
                     4. A fair grade (A-F) and suggested marks out of 10
                     5. Specific suggestions for improvement
+
+                    Give in less than 300 words feedback
                     
                     Student Answer:
                     ```
