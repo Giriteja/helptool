@@ -195,10 +195,7 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     "role": "user",
                     "content": f"""
                     Compare the following student answer with the teacher's solution. 
-                    Provide overall feedback:
-                    
-                    
-                    Give in less than 300 words feedback
+                    Provide overall feedback in less than 100 words.
                     
                     Student Answer:
                     ```
