@@ -248,6 +248,9 @@ def crop_image_from_rect(image, rect_coords):
     cropped = image.crop((x_min, y_min, x_max, y_max))
     return cropped
 
+def bytes_to_pil_image(img_bytes):
+    return Image.open(io.BytesIO(img_bytes))
+
 # Main Streamlit app
 def main():
     st.title("Exam Answer Comparison Tool")
@@ -361,7 +364,9 @@ def main():
                 height = current_image.height
                 
                 # Convert to numpy array without any function calls
-                img_array = np.array(current_image)
+                pil_image = bytes_to_pil_image(current_image)
+                width = pil_image.width
+                height = pil_image.height
                 
                 # Create a canvas with explicit dimensions
                 st.write("**Draw a rectangle around the answer you want to extract:**")
@@ -369,7 +374,7 @@ def main():
                     fill_color="rgba(255, 165, 0, 0.3)",
                     stroke_width=2,
                     stroke_color="#FF0000",
-                    background_image=Image.open(current_image) if current_image else None,
+                    background_image=pil_image,  # Use the PIL Image here
                     drawing_mode="rect",
                     key=f"canvas_{current_index}",
                     update_streamlit=True,
