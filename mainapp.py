@@ -196,6 +196,7 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     "content": f"""
                     Compare the following student answer with the teacher's solution. 
                     Provide overall feedback in less than 100 words.
+                    you will be given a key vlaue pairs while giving output maintain same json structure while giving marks refer maximum marks in given json input
                     
                     Student Answer:
                     ```
