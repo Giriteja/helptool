@@ -89,7 +89,7 @@ def extract_text_with_claude(image, client):
         response = client.messages.create(
             model="claude-3-opus-20240229",
             max_tokens=4000,
-            system="You are an expert OCR system. Your task is to accurately extract text from the provided image. Extract all visible text maintaining original formatting as much as possible. If mathematical equations are present, represent them using LaTeX notation.",
+            system="You are an expert OCR system. Your task is to accurately extract text from the provided student hand written image. Extract all visible text maintaining original formatting as much as possible. If mathematical equations are present, represent them using LaTeX notation.",
             messages=[
                 {
                     "role": "user",
