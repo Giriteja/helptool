@@ -360,8 +360,7 @@ def main():
                 
                 
                 # Get image dimensions first
-                width = current_image.width
-                height = current_image.height
+                
                 
                 # Convert to numpy array without any function calls
                 pil_image = bytes_to_pil_image(current_image)
