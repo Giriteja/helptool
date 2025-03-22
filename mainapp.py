@@ -195,14 +195,9 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     "role": "user",
                     "content": f"""
                     Compare the following student answer with the teacher's solution. 
-                    Provide detailed feedback including:
+                    Provide overall feedback:
                     
-                    1. What key concepts the student correctly identified
-                    2. What important elements are missing
-                    3. Any misconceptions or errors
-                    4. A fair grade (A-F) and suggested marks out of 10
-                    5. Specific suggestions for improvement
-
+                    
                     Give in less than 300 words feedback
                     
                     Student Answer:
@@ -215,7 +210,7 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     {solution_text}
                     ```
                     
-                    Format your response using the headings: Key Strengths, Missing Elements, Misconceptions, Grade, and Suggestions for Improvement.
+                    Format your response using the heading Overall Fedback.
                     """
                 }
             ]
