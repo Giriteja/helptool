@@ -241,8 +241,6 @@ def get_ai_feedback(extracted_text, solution_text, client):
     "No of words used": 89,
 
     "Overall Score": 4
-
-  }
  
                     
                     
