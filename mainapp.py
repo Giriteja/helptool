@@ -187,7 +187,7 @@ def get_ai_feedback(extracted_text, solution_text, client):
     
     try:
         response = client.messages.create(
-            model="claude-3-opus-20240229model",
+            model="claude-3-7-sonnet-20250219",
             max_tokens=5000,
             system="You are an expert teacher assistant who helps grade student answers and provide detailed, constructive feedback.",
             messages=[
