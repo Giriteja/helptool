@@ -196,7 +196,55 @@ def get_ai_feedback(extracted_text, solution_text, client):
                     "content": f"""
                     Compare the following student answer with the teacher's solution. 
                     Provide overall feedback in less than 100 words.
-                    you will be given a key vlaue pairs while giving output maintain same json structure while giving marks refer maximum marks in given json input
+                    you will be given a key vlaue pairs while giving output maintain same json structure. while giving marks refer MaximumMarks in given json input
+                    example input format:
+                    "question": "5.(a) Examining consistency and solvability, solve the following equations by matrix method. [ x + 2y + 3z = 14] [ 2x - y + 5z = 15 ] [ 2y + 4z - 3x = 13 ]",
+
+    "Teacher_Answer": ""
+
+    "MaximumMarks": 5,
+
+    "Diagram_Needed": "No",
+
+    "Section_Number": 4,
+
+    "Total_Questions_In_Section": 12,
+
+    "Total_questions_that_must_be_answered": 6,
+
+    "Total_Marks_of_QuestionPaper": 30,
+
+    "topic": "Matrices and Determinants",
+
+    "Grammatical_Mistakes": "No grammatical mistakes found",
+
+    "Corrected_Student_Answer": "The student has written the system of equations in matrix form [1 2 3; 2 -1 5; -3 2 4]X = [14; 15; 13] and calculated the determinant |A| = 45. Found A^(-1) = 1/45[-17 18 13; 16 -9 1; 10 0 -5] and computed X = A^(-1)B to get x = 201/45, y = 102/45, z = 75/45",
+
+    "Accuracy": "Medium",
+
+    "Relevance": "High",
+
+    "Completeness": "High",
+
+    "Depth of Understanding": "High",
+
+    "Clarity of Expression": "High",
+
+    "Use of Examples": "High",
+
+    "Diagram": "Not Required",
+
+    "Overall Quality": "High",
+
+    "feedback": "The student has correctly followed the matrix method approach by: 1) Writing the system in matrix form AX = B; 2) Finding determinant of A; 3) Computing inverse of A; 4) Solving X = A^(-1)B. However, there is a calculation error in determinant (got 45 instead of -57) which led to incorrect final values. The method and steps are correct but accuracy was affected by computational error.",
+
+    "No of words used": 89,
+
+    "Overall Score": 4
+
+  }
+ 
+                    
                     
                     Student Answer:
                     ```
