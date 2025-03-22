@@ -412,6 +412,14 @@ def main():
         if st.session_state.pdf_images:
             current_index = st.session_state.selected_image_index
             
+            # Display the cropped image at the top
+            if current_index < len(st.session_state.cropped_images) and st.session_state.cropped_images[current_index] is not None:
+                st.subheader("Cropped Image")
+                st.image(st.session_state.cropped_images[current_index], width=400)
+            else:
+                st.info("No cropped image available. Please crop an image in the 'Image Selection' tab first.")
+            
+            # Text comparison in columns
             col1, col2 = st.columns(2)
             
             with col1:
